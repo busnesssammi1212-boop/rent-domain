@@ -8,13 +8,16 @@ export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
+
   async function submit(e) {
-    e.preventDefault(); setBusy(true);
+    e.preventDefault();
+    setBusy(true);
     const sb = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-    const { error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) { toast('Invalid credentials', 'error'); setBusy(false); return; }
+    const { error } = await sb.auth.signInWithPassword({ email: email.trim(), password });
+    if (error) { toast(error.message, 'error'); setBusy(false); return; }
     window.location.href = '/admin';
   }
+
   return (
     <div className="container-x max-w-sm py-20">
       <h1 className="text-2xl font-bold text-white">Administrator sign in</h1>
